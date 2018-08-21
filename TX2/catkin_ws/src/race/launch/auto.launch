@@ -1,0 +1,42 @@
+<launch>
+<!-- T4-->
+
+<node
+    pkg="urg_node"
+    type="urg_node"
+    name="lidar"
+>
+<param  name="ip_address" value="192.168.0.10"/>
+</node>
+
+
+
+<!-- T6-->
+<node
+    pkg="race"
+    type="corner_finder.py"
+    name="corner"
+/>
+
+
+<!-- T8-->
+<arg name="dis" default="2" />
+<node
+    pkg="race"
+    type="robust_obs_finder.py"
+    name="obtest2"
+    output="screen">
+    <param name="distance" value="$(arg dis)" />
+</node>
+
+<node
+    pkg="race"
+    type="kcontrol.py"
+    name="kcontrol"
+    output="screen"
+/>
+
+
+
+</launch> 
+

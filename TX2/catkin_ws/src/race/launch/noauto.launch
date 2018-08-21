@@ -1,0 +1,21 @@
+<launch>
+<!-- T4-->
+<node
+    pkg="urg_node"
+    type="urg_node"
+    name="lidar"
+>
+<param  name="ip_address" value="192.168.0.10"/>
+</node>
+
+
+
+<!-- T6-->
+<node
+    pkg="race"
+    type="control.py"
+    name="control"
+/>
+
+</launch> 
+
