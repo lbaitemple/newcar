@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<launch>
+    <arg name="port" default="/dev/ttyACM0" />
+    <arg name="steer_pin" default="23" />
+    <arg name="motor_pin" default="1" />
+    <arg name="freq" default="100" />
+    <arg name="sft" default="-1" />
+
+    <node name="imu" pkg="imu_ros" type="imu_node.py">
+    <param name="serialport" value="$(arg port)"/>
+    </node>
+    <node name="drive" pkg="rpimotor" type="drive.py">
+    <param name="steer_port" value="$(arg steer_pin)" />
+    <param name="motor_port" value="$(arg motor_pin)" />
+    <param name="frequency" value="$(arg freq)" />
+    <param name="shift" value="$(arg sft)" />
+    </node>
+</launch>  
