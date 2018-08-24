@@ -1,0 +1,10 @@
+[Unit]
+Description=GPIO Script
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/pigpiod 
+
+[Install]
+WantedBy=multi-user.target
