@@ -29,4 +29,6 @@ rm ~/.ssh/known_host
 2) reconnect to raspberry pi
 ```
 ssh pi@10.109.140.234 -oHostKeyAlgorithms='ssh-rsa'
+source develop/setup.bash
+roslaunch race rauto.launch
 ```
