@@ -11,9 +11,7 @@ source develop/setup.bash
 roslaunch race auto.launch
 rosrun race kill.py
 ```
-
-
-
+On the raspberry Pi
 ```
 ssh pi@raspberry_ip
 cd ~/catkin_ws
@@ -22,3 +20,13 @@ source develop/setup.bash
 roslaunch rpimotor f1.launch
 ```
 
+We will need to create a remotelaunch procedure on TX2
+1) remove known_hosts
+```
+rm ~/.ssh/known_host
+```
+
+2) reconnect to raspberry pi
+```
+ssh pi@10.109.140.234 -oHostKeyAlgorithms='ssh-rsa'
+```
