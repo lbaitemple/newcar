@@ -1,0 +1,75 @@
+<launch>
+<!-- T4-->
+
+<node
+    pkg="urg_node"
+    type="urg_node"
+    name="lidar"
+>
+<param  name="ip_address" value="192.168.0.10"/>
+</node>
+
+
+
+<!-- T6-->
+<node
+    pkg="race"
+    type="corner_finder.py"
+    name="corner"
+/>
+
+
+<!-- T8-->
+<arg name="dis" default="2" />
+<node
+    pkg="race"
+    type="robust_obs_finder.py"
+    name="obtest2"
+    output="screen">
+    <param name="distance" value="$(arg dis)" />
+</node>
+
+<node
+    pkg="race"
+    type="kcontrol.py"
+    name="kcontrol"
+    output="screen"
+/>
+
+<!-- remote launch //-->
+<machine
+    name="pi"
+    address="10.109.140.234"
+    user="pi"
+    password="raspberry"
+    timeout="60"
+    env-loader="/home/pi/catkin_ws/devel/remote_env_loader.sh"
+  />
+  
+  <arg name="port" default="/dev/ttyACM0" />
+  <arg name="steer_pin" default="23" />
+  <arg name="motor_pin" default="1" />
+  <arg name="freq" default="100" />
+  <arg name="sft" default="-1" />
+
+  <node
+    machine="pi"
+    name="rpimotor"
+    pkg="imu_ros"
+    type="imu_node.py"
+  >
+  <param name="serialport" value="$(arg port)"/>
+  </node>
+
+   <node machine="pi" name="drive" pkg="rpimotor" type="drive.py" >
+   <param name="steer_port" value="$(arg steer_pin)" />
+    <param name="motor_port" value="$(arg motor_pin)" />
+    <param name="frequency" value="$(arg freq)" />
+    <param name="shift" value="$(arg sft)" />
+    </node>
+
+
+
+
+</launch> 
+

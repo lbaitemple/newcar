@@ -1,0 +1,33 @@
+<launch>
+
+<node
+    pkg="urg_node"
+    type="urg_node"
+    name="lidar"
+>
+<param  name="ip_address" value="192.168.0.10"/>
+</node>
+
+  
+<machine
+    name="pi"
+    address="10.109.140.234"
+    user="pi"
+    password="raspberry"
+    timeout="60"
+    env-loader="/home/pi/catkin_ws/devel/remote_env_loader.sh"
+  />
+  
+  <arg name="port" default="/dev/ttyACM0" />
+  <!-- Flir Lepton Interface -->
+  <node
+    machine="pi"
+    name="rpimotor"
+    pkg="imu_ros"
+    type="imu_node.py"
+  >
+  <param name="serialport" value="$(arg port)"/>
+  </node>
+
+
+</launch>
