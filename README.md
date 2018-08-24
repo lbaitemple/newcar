@@ -20,15 +20,18 @@ source develop/setup.bash
 roslaunch rpimotor f1.launch
 ```
 
-We will need to create a remotelaunch procedure on TX2
-1) remove known_hosts
+We will need to create a remotelaunch procedure on TX2 (no need to login raspberry pi)
+https://github.com/pandora-auth-ros-pkg/pandora_docs/wiki/Remote-Machines-Running-ROS-nodes 
+1) remove known_hosts and create ssh credential
 ```
 rm ~/.ssh/known_host
+ssh-keygen -t rsa 
+ssh-copy-id -i <ssh-key> pi@raspberrypi-ip-address
 ```
 
 2) reconnect to raspberry pi
 ```
-ssh pi@10.109.140.234 -oHostKeyAlgorithms='ssh-rsa'
+ssh pi@raspberrypi-ip-address -oHostKeyAlgorithms='ssh-rsa'
 source develop/setup.bash
 roslaunch race rauto.launch
 ```
