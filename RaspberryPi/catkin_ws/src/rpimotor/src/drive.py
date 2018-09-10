@@ -7,7 +7,7 @@ from std_msgs.msg import Bool
 from std_msgs.msg import Empty
 from std_msgs.msg import Int32
 from race.msg import drive_param
-import os
+import pigpio
 
 str_msg = Int32()
 flagStop = False
@@ -18,12 +18,12 @@ pwm_upperlimit = 20
 mport=1
 sport=23
 
+
 def setMotor(pin, duty):
-   str1="gpio pwm "+ str(pin) + " " + str(duty) 
-   print str1
-   os.system(str1)
-
-
+   global pi
+   duty=duty*10000
+   p=pi.hardware_PWM(pin, 100, duty) 
+   
 
 def getch():
     fd = sys.stdin.fileno()
@@ -39,11 +39,10 @@ def messageDrive(pwm):
     global mport
     global sport
     global flagStop
-    print flagStop
-    print "WHAT"
-    if(flagStop is False):
-	v = pwm.velocity * 3 + pwm_center
 
+    if(flagStop is False):
+	v = pwm.velocity * 5 + pwm_center
+#        rospy.loginfo("speed is %d", v)
         if(v < pwm_lowerlimit):
 	    setMotor(mport, pwm_lowerlimit)
 	elif(v > pwm_upperlimit):
@@ -51,7 +50,8 @@ def messageDrive(pwm):
 	else:
 	    setMotor(mport, v)
 
-	a = pwm.angle * 3 + pwm_center
+	a = pwm.angle + pwm_center
+        rospy.loginfo("angle is %d", a)
 	if(a < pwm_lowerlimit):
 	    setMotor(sport, pwm_lowerlimit)
 	elif(a > pwm_upperlimit):
@@ -66,11 +66,8 @@ def messageEmergencyStop(flag):
         global flagStop
 	flagStop = flag.data
 	if(flagStop is True):
-                print "STOP receive"
-                print pwm_center
 		setMotor(mport, pwm_center)
 		setMotor(sport, pwm_center)
-                print "DONE"
 
 def listener():
     rospy.init_node('listener', anonymous=True)
@@ -79,18 +76,15 @@ def listener():
     rospy.spin()
 
 if __name__ == '__main__':
+    global pi
+    pi = pigpio.pi()
 
-    sport=rospy.get_param('~steer_port', 23)
-    mport=rospy.get_param('~motor_port', 1)
-#    freq=rospy.get_param('~frequency', 100)
-    str1="gpio mode " + str(mport) +  " pwm"
-    os.system(str1)
+    if not pi.connected:
+        exit()
 
-    str1="gpio mode " + str(sport) +  " pwm"
-    os.system(str1)
-    os.system("gpio pwm-ms")
-    os.system("gpio pwmc 1920")
-    os.system("gpio pwmr 100")
+
+    sport=rospy.get_param('~steer_port', 13)
+    mport=rospy.get_param('~motor_port', 18)
 
     setMotor(mport, pwm_center)
     setMotor(sport, pwm_center)
@@ -102,3 +96,4 @@ if __name__ == '__main__':
     setMotor(mport, pwm_center)
     setMotor(sport, pwm_center)
 
+    pi.stop()
