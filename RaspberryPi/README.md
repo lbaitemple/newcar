@@ -1,7 +1,8 @@
 You will need to create a startup script to boot pgiod 
 ```
-sudo cp gpio.service /lib/systemd/system/gpio.service
+sudo apt-get install pigpio
+sudo cp pigpiod.service /lib/systemd/system/pigpiod.service
 sudo systemctl daemon-reload
-sudo systemctl enable gpio
-sudo systemctl start gpio
+sudo systemctl enable pigpiod
+sudo systemctl start pigpiod
 ```
