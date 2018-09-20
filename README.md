@@ -10,9 +10,9 @@ catkin_make
 source develop/setup.bash
 roslaunch race auto.launch
 ```
-In the second terminal, you will need to
+In the second TX2 terminal, you will need to
 ```
-d ~/catkin_ws
+cd ~/catkin_ws
 catkin_make
 source develop/setup.bash
 rosrun race kill.py
