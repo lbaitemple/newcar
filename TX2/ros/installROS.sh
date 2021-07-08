@@ -86,6 +86,8 @@ sudo apt-add-repository restricted
 
 # Setup sources.lst
 sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+# Setup dirmngr for keys
+sudo apt install dirmngr
 # Setup keys
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key 0xB01FA116
 # Installation
